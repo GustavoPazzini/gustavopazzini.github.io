@@ -4,8 +4,7 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-(function() {
-  "use strict";
+(function(){
 
   /**
    * Easy selector helper function
@@ -254,3 +253,6 @@
   });
 
 })()
+$(window).scroll(function(){
+  $(".fdd").css("opacity", 1 - $(window).scrollTop() / 1000);
+	});
