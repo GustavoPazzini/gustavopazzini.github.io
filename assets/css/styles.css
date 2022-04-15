@@ -13,10 +13,14 @@ a:hover {
   color: #37b3ed;
   text-decoration: none;
 }
-
-h1, h2, h3, h4, h5, h6 {
+h1{
+	font-family: 'Open Sans', sans-serif;
+	text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+h2, h3, h4, h5, h6 {
 	font-family: 'Open Sans', sans-serif;
 }
+
 /*Button to up*/
 .back-to-top {
   position: fixed;
@@ -206,13 +210,15 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 56px;
   color: #fff;
+  text-shadow: 4px 4px black;
 }
 #hero p {
   color: #fff;
   margin-bottom: 50px;
   font-size: 26px;
   font-family: "Poppins", sans-serif;
-  
+  text-shadow: 1.5px 1.5px black;
+
 }
 #hero p span {
   color: #fff;
