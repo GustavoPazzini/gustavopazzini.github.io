@@ -21,6 +21,14 @@ h2, h3, h4, h5, h6 {
 	font-family: 'Open Sans', sans-serif;
 }
 
+.margin-text{
+  margin-top: 10px;
+}
+
+.tab-text{
+  margin-left: 4em;
+}
+
 /*Button to up*/
 .back-to-top {
   position: fixed;
