@@ -312,3 +312,7 @@ section {
 .about .section-title h2:hover{
   color: #092346;
 }
+
+.about .section-title h2:hover::after{
+  width: 100px;
+}
