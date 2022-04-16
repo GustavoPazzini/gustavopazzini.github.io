@@ -255,4 +255,4 @@
 })()
 $(window).scroll(function(){
   $(".fdd").css("opacity", 1 - $(window).scrollTop() / 1000);
-	});
+});
