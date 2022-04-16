@@ -1,6 +1,7 @@
 /*******************General*******************/
 body {
-  font-family: 'Open Sans';
+  font-family: Constantia, "Lucida Bright", "DejaVu Serif", Georgia, "serif";
+  font-size: 17.5px;
   color: #000000;
 }
 
@@ -289,7 +290,7 @@ section {
   margin-bottom: 0;
 }
 
-/*******************About*******************/
+/*******************Sobre*******************/
 .about .content h3 {
   font-weight: 700;
   font-size: 26px;
