@@ -324,3 +324,9 @@ section {
 .about .section-title h2:hover::after{
   width: 100px;
 }
+
+.about .number{
+  font-size: 100%;
+  padding-right: 0.2em;
+  font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+}
