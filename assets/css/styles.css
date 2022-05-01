@@ -21,6 +21,17 @@ h1{
 h2, h3, h4, h5, h6 {
 	font-family: 'Open Sans', sans-serif;
 }
+.section-title h2:hover{
+  color: #2F63AA;
+}
+
+.about .section-title h2:hover::after{
+  width: 100px;
+}
+
+.experiences .section-title h2:hover::after{
+  width: 210px;
+}
 
 .margin-text{
   margin-top: 10px;
@@ -289,7 +300,7 @@ section {
   margin-bottom: 0;
 }
 
-/*******************Sobre*******************/
+/*******************About*******************/
 .about .content h3 {
   font-weight: 700;
   font-size: 26px;
@@ -317,16 +328,21 @@ section {
   margin-bottom: 0;
 }
 
-.about .section-title h2:hover{
-  color: #092346;
-}
-
-.about .section-title h2:hover::after{
-  width: 100px;
-}
-
 .about .number{
   font-size: 100%;
   padding-right: 0.2em;
   font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
 }
+.about::after{
+	content: "";
+  position: absolute;
+  display: block;
+  width: 150px;
+  height: 3px;
+  background: #149ddd;
+  bottom: 0;
+  left: 0;
+  transition: all 0.3s ease-in-out;
+}
+/*******************Experiences*******************/
+
