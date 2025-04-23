@@ -2,18 +2,42 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Sorriso = Música :)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorria</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background: black;
+      background: white;
       font-family: sans-serif;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #site {
+      width: 100%;
+      height: 100%;
+      max-width: 1200px;  /* Limita o tamanho do container em desktops */
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #sorriso-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 9999;
+      transition: opacity 0.3s linear;
     }
 
     #start-screen {
-      position: absolute;
+      position: fixed;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
@@ -24,7 +48,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      z-index: 999;
+      z-index: 10000;
     }
 
     #start-screen button {
@@ -38,59 +62,115 @@
       border-radius: 8px;
     }
 
-    #overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s linear;
-      z-index: 100;
-    }
-
     #video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 720px;
-      height: 560px;
-      z-index: 1;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 200px;
+      height: 150px;
+      z-index: 10002;
+      border: 2px solid white;
+      border-radius: 8px;
     }
 
     #msg {
-      position: absolute;
-      top: 10px;
+      position: fixed;
+      top: 170px;
       left: 10px;
       color: white;
-      font-size: 20px;
+      font-size: 18px;
       background: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      z-index: 101;
+      padding: 6px 12px;
+      border-radius: 4px;
+      z-index: 10003;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1000px) {
+      #site {
+        width: 100%;
+        padding-top: 150px;
+      }
+
+      #video {
+        width: 120px;
+        height: 100px;
+        top: 5px;
+        left: 5px;
+      }
+
+      #msg {
+        top: 130px;
+        left: 5px;
+        font-size: 16px;
+      }
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      #site {
+        width: 100%;
+        padding-top: 150px;
+      }
+
+      #video {
+        width: 120px;
+        height: 100px;
+        top: 5px;
+        left: 5px;
+      }
+
+      #msg {
+        top: 130px;
+        left: 5px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #site {
+        width: 100%;
+        padding-top: 150px;
+      }
+
+      #video {
+        width: 120px;
+        height: 100px;
+      }
+
+      #msg {
+        top: 120px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
 
+<!-- SEU SITE COMEÇA AQUI -->
+<div id="site">
+  <h1>Hello World</h1>
+  <p>Este é o conteúdo do seu site. Tudo isso ficará escurecido se você não sorrir.</p>
+</div>
+<!-- SEU SITE TERMINA AQUI -->
+
+<!-- CAMADAS DO SISTEMA DE SORRISO -->
+<div id="sorriso-overlay"></div>
 <div id="start-screen">
   <h1>Bem-vindo! 😄</h1>
   <p>Este site usa sua câmera apenas para detectar sorrisos.<br>Nenhuma imagem será gravada ou enviada.</p>
   <button onclick="start()">Começar</button>
 </div>
-
 <div id="msg">Carregando...</div>
-<div id="overlay"></div>
-<video id="video" autoplay muted></video>
+<video id="video" autoplay muted playsinline></video>
 <audio id="music" loop>
-  <source src="https://gustavopazzini.com.br/assets/audio/estranho.mp3" type="audio/mpeg">
-  Seu navegador não suporta áudio.
+  <source src="https://gustavopazzini.com.br/assets/audio/arcane.mp3" type="audio/mpeg">
 </audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
 <script>
   const video = document.getElementById('video');
-  const overlay = document.getElementById('overlay');
+  const overlay = document.getElementById('sorriso-overlay');
   const msg = document.getElementById('msg');
   const music = document.getElementById('music');
   const startScreen = document.getElementById('start-screen');
@@ -98,6 +178,7 @@
   let lastSmileTime = Date.now();
   let fading = false;
   let fadeInterval = null;
+  let smileLocked = false;  // Novo estado para verificar se o sorriso está travado
 
   async function setupCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
@@ -120,19 +201,15 @@
   function startFadeOut() {
     if (fading) return;
     fading = true;
-    let opacity = 0;
+    let opacity = parseFloat(overlay.style.opacity) || 0;
     let volume = music.volume;
 
     fadeInterval = setInterval(() => {
-      opacity += 0.05;
-      volume -= 0.05;
-
-      overlay.style.opacity = Math.min(opacity, 1);
-      music.volume = Math.max(volume, 0);
-
-      if (opacity >= 1) {
-        clearInterval(fadeInterval);
-      }
+      opacity = Math.min(opacity + 0.05, 1);
+      volume = Math.max(volume - 0.05, 0);
+      overlay.style.opacity = opacity;
+      music.volume = volume;
+      if (opacity >= 1) clearInterval(fadeInterval);
     }, 150);
   }
 
@@ -141,20 +218,28 @@
     fading = false;
     clearInterval(fadeInterval);
 
-    let opacity = parseFloat(overlay.style.opacity);
+    let opacity = parseFloat(overlay.style.opacity) || 0;
     let volume = music.volume;
 
     fadeInterval = setInterval(() => {
-      opacity -= 0.05;
-      volume += 0.05;
-
-      overlay.style.opacity = Math.max(opacity, 0);
-      music.volume = Math.min(volume, 1);
-
-      if (opacity <= 0) {
-        clearInterval(fadeInterval);
-      }
+      opacity = Math.max(opacity - 0.05, 0);
+      volume = Math.min(volume + 0.05, 1);
+      overlay.style.opacity = opacity;
+      music.volume = volume;
+      if (opacity <= 0) clearInterval(fadeInterval);
     }, 150);
+  }
+
+  // Função para alternar o estado de sorriso travado
+  function toggleSmileLock() {
+    smileLocked = !smileLocked;
+    if (smileLocked) {
+      msg.innerText = "😀 Sorrindo! (Travado)";
+      startFadeIn();
+    } else {
+      msg.innerText = "😐 Sem sorriso...";
+      startFadeOut();
+    }
   }
 
   async function start() {
@@ -166,8 +251,8 @@
     await music.play();
 
     const canvas = faceapi.createCanvasFromMedia(video);
+    canvas.style.display = 'none';
     document.body.append(canvas);
-    canvas.style.display = "none";
 
     const displaySize = { width: video.width, height: video.height };
     faceapi.matchDimensions(canvas, displaySize);
@@ -177,7 +262,7 @@
         .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
         .withFaceExpressions();
 
-      if (detections) {
+      if (detections && !smileLocked) {
         if (detectSmile(detections.expressions)) {
           lastSmileTime = Date.now();
           msg.innerText = "😀 Sorrindo!";
@@ -185,16 +270,19 @@
         } else {
           msg.innerText = "😐 Sem sorriso...";
         }
-      } else {
+      } else if (!smileLocked) {
         msg.innerText = "Rosto não detectado";
       }
 
       const noSmileTime = Date.now() - lastSmileTime;
-      if (noSmileTime > 3000) {
+      if (noSmileTime > 3000 && !smileLocked) {
         startFadeOut();
       }
     }, 200);
   }
+
+  // Adiciona o evento de clique no vídeo
+  video.addEventListener('click', toggleSmileLock);
 </script>
 </body>
 </html>
